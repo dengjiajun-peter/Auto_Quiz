@@ -1,4 +1,4 @@
-# EduHK Dreamer - Intelligent Tutoring System for 1st Grade Math
+### EduHK Dreamer - Intelligent Tutoring System for 1st Grade Math
 
 An adaptive, AI-powered tutoring system designed to help first-grade students master fundamental mathematics concepts through personalized learning paths, real-time auto-grading, and intelligent error analysis.
 
