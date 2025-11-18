@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Quiz Result! - {{ module_title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f8f9fa; }
+        .result-header { text-align: center; margin-bottom: 30px; }
+        .score-card { background-color: #2ecc71; color: white; padding: 20px; border-radius: 12px; display: inline-block; }
+        .score-value { font-size: 48px; font-weight: bold; margin: 10px 0; }
+        .total-questions { font-size: 18px; }
+        .feedback { font-size: 20px; margin-top: 15px; }
+        .details-section { margin-top: 40px; }
+        .details-header { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-detail { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 12px 0; background-color: white; }
+        .correct { color: #27ae60; font-weight: bold; }
+        .incorrect { color: #e74c3c; font-weight: bold; }
+        .action-buttons { text-align: center; margin: 30px 0; }
+        .action-btn { padding: 10px 25px; font-size: 16px; margin: 0 10px; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; }
+        .restart-btn { background-color: #3498db; color: white; }
+        .path-btn { background-color: #f39c12; color: white; }
+        .report-btn { background-color: #9b59b6; color: white; }
+        .action-btn:hover { opacity: 0.9; }
+        .mastery-note { font-size: 14px; margin-top: 8px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="result-header">
+        <h1>Great Job, {{ username }}! 🎊</h1>
+        <div class="score-card">
+            <div>Your Score</div>
+            <div class="score-value">{{ score }} / {{ total }}</div>
+            <div class="total-questions">{{ total }} Questions Total</div>
+        </div>
+        <!-- Personalized feedback based on score -->
+        {% if score / total >= 0.9 %}
+            <div class="feedback">Wow! You're a math superstar! 🌟</div>
+        {% elif score / total >= 0.7 %}
+            <div class="feedback">Excellent work! You're almost a pro! 🎉</div>
+        {% elif score / total >= 0.5 %}
+            <div class="feedback">Good try! Practice more to get better! 💪</div>
+        {% else %}
+            <div class="feedback">Don't worry! Let's practice together—you'll improve! 🤗</div>
+        {% endif %}
+    </div>
+
+ <!-- Use Jinja2's `loop.index` to number questions (1-based) -->
+{% for detail in details %}
+    <div class="question-detail">
+        <!-- `loop.index` = current iteration number (1, 2, ..., 10) -->
+        <h3>Question {{ loop.index }}: {{ detail.text }}</h3>
+        <p><strong>Your Answer:</strong> {{ detail.user_answer }}</p>
+        <p><strong>Correct Answer:</strong> {{ detail.correct_answer }}</p>
+
+        <!-- Keep the rest of your original logic (correct/incorrect styling, mastery notes) -->
+        {% if detail.score == 1.0 %}
+            <p class="correct">✅ You got this right!</p>
+            {% if detail.mastered %}
+                <p class="mastery-note">You mastered: {{ detail.mastered|join(", ") }}</p>
+            {% endif %}
+        {% else %}
+            <p class="incorrect">❌ Let's review this!</p>
+            {% if detail.missed %}
+                <p class="mastery-note">Need to practice: {{ detail.missed|join(", ") }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfor %}
+
+    <div class="action-buttons">
+        <!-- Restart the same module -->
+        <a href="/enter-username?module_id={{ module_id }}">
+            <button class="action-btn restart-btn">Restart This Quiz</button>
+        </a>
+        <!-- View personalized learning path -->
+        <a href="/learning-path?username={{ username }}">
+            <button class="action-btn path-btn">Get My Learning Path</button>
+        </a>
+        <!-- View full report -->
+        <a href="/report?username={{ username }}">
+            <button class="action-btn report-btn">View My Math Report</button>
+        </a>
+    </div>
+</body>
+</html>

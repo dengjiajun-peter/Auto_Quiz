@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ username }}'s Math Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; background-color: #f5f7fa; }
+        .report-header { text-align: center; color: #2c3e50; margin-bottom: 40px; }
+        .report-header h1 { font-size: 32px; margin-bottom: 10px; }
+        .report-header p { font-size: 18px; color: #7f8c8d; }
+        .chart-section { background-color: white; padding: 20px; border-radius: 10px; margin-bottom: 40px; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .mastery-section { background-color: white; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .mastery-header { color: #2c3e50; border-bottom: 2px solid #9b59b6; padding-bottom: 10px; margin-bottom: 20px; }
+        .module-mastery { margin-bottom: 25px; }
+        .module-title { font-size: 20px; color: #9b59b6; margin-bottom: 15px; }
+        .mastery-bar-container { margin: 12px 0; }
+        .mastery-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .mastery-bar { height: 12px; background-color: #e0e0e0; border-radius: 6px; overflow: hidden; }
+        .mastery-fill { height: 100%; border-radius: 6px; }
+        .fill-high { background-color: #2ecc71; } /* > 0.7 */
+        .fill-medium { background-color: #f39c12; } /* 0.5 - 0.7 */
+        .fill-low { background-color: #e74c3c; } /* < 0.5 */
+        .submissions-section { background-color: white; padding: 25px; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .submissions-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .submissions-table th, .submissions-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        .submissions-table th { background-color: #f8f9fa; color: #2c3e50; }
+        .back-btn { display: inline-block; margin-top: 30px; padding: 10px 20px; background-color: #3498db; color: white; border-radius: 6px; text-decoration: none; transition: background-color 0.3s; }
+        .back-btn:hover { background-color: #2980b9; }
+        .no-data { text-align: center; padding: 30px; color: #7f8c8d; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <h1>📊 {{ username }}'s Math Progress Report</h1>
+        <p>Track your growth and see what you need to practice!</p>
+    </div>
+
+    <!-- Score Distribution Chart -->
+    <div class="chart-section">
+        <h2>Your Score Distribution</h2>
+        {% if img_base64 %}
+            <img src="data:image/png;base64,{{ img_base64 }}" alt="Score Distribution Chart">
+        {% else %}
+            <div class="no-data">No quiz results yet! Take a quiz to see your score chart.</div>
+        {% endif %}
+    </div>
+
+    <!-- Concept Mastery -->
+    <div class="mastery-section">
+        <h2 class="mastery-header">📈 Concept Mastery (0% = Need Practice, 100% = Mastered)</h2>
+
+        <!-- Addition & Subtraction Mastery -->
+        <div class="module-mastery">
+            <div class="module-title">1. Addition & Subtraction within 100</div>
+            {% if as_mastery %}
+                {% for concept, mastery in as_mastery.items() %}
+                    <div class="mastery-bar-container">
+                        <div class="mastery-label">
+                            <span>{{ concept }}</span>
+                            <span>{{ (mastery * 100)|round(1) }}%</span>
+                        </div>
+                        <div class="mastery-bar">
+                            <div class="mastery-fill
+                                {% if mastery >= 0.7 %}fill-high{% elif mastery >= 0.5 %}fill-medium{% else %}fill-low{% endif %}"
+                                style="width: {{ (mastery * 100)|round(0) }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No mastery data yet—take a quiz!</div>
+            {% endif %}
+        </div>
+
+        <!-- Multiplication & Division Mastery -->
+        <div class="module-mastery">
+            <div class="module-title">2. Multiplication & Division within 100</div>
+            {% if md_mastery %}
+                {% for concept, mastery in md_mastery.items() %}
+                    <div class="mastery-bar-container">
+                        <div class="mastery-label">
+                            <span>{{ concept }}</span>
+                            <span>{{ (mastery * 100)|round(1) }}%</span>
+                        </div>
+                        <div class="mastery-bar">
+                            <div class="mastery-fill
+                                {% if mastery >= 0.7 %}fill-high{% elif mastery >= 0.5 %}fill-medium{% else %}fill-low{% endif %}"
+                                style="width: {{ (mastery * 100)|round(0) }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No mastery data yet—take a quiz!</div>
+            {% endif %}
+        </div>
+
+        <!-- Fractions Mastery -->
+        <div class="module-mastery">
+            <div class="module-title">3. Fractions Basics</div>
+            {% if fr_mastery %}
+                {% for concept, mastery in fr_mastery.items() %}
+                    <div class="mastery-bar-container">
+                        <div class="mastery-label">
+                            <span>{{ concept }}</span>
+                            <span>{{ (mastery * 100)|round(1) }}%</span>
+                        </div>
+                        <div class="mastery-bar">
+                            <div class="mastery-fill
+                                {% if mastery >= 0.7 %}fill-high{% elif mastery >= 0.5 %}fill-medium{% else %}fill-low{% endif %}"
+                                style="width: {{ (mastery * 100)|round(0) }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No mastery data yet—take a quiz!</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quiz Submission History -->
+    <div class="submissions-section">
+        <h2 class="mastery-header">📝 Your Quiz History</h2>
+        {% if submissions %}
+            <table class="submissions-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Score</th>
+                        <th>Total Questions</th>
+                        <th>Date Taken</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in submissions %}
+                        <tr>
+                            <td>{{ submission[0] }}</td>
+                            <td>{{ submission[1] }} / {{ submission[2] }}</td>
+                            <td>{{ submission[2] }}</td>
+                            <td>{{ submission[3] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-data">You haven't taken any quizzes yet! Start with a module to track your progress.</div>
+        {% endif %}
+    </div>
+
+    <a href="/" class="back-btn">Back to Home</a>
+</body>
+</html>

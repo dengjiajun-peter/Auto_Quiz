@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Learning Path</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f0f8ff; }
+        .stage-card { background: white; padding: 20px; margin: 15px 0; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stage-title { color: #2c3e50; font-size: 1.2em; margin-bottom: 10px; }
+        .error-box { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .resource-box { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .goal { color: #27ae60; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>Hi {{ username }}! Your Learning Path</h1>
+    <p>Fix your mistakes with targeted practice:</p>
+
+    {% for stage in path %}
+    <div class="stage-card">
+        <h2 class="stage-title">{{ stage.stage }}</h2>
+        <p><strong>Concept:</strong> {{ stage.concepts[0] }}</p>
+        <p><strong>Difficulty:</strong> {{ stage.difficulty }}</p>
+
+        {% if stage.related_error %}
+        <div class="error-box">
+            <p><strong>Your Mistake:</strong></p>
+            <p>Question: {{ stage.related_error.question }}</p>
+            <p>Your Answer: {{ stage.related_error.your_answer }}</p>
+            <p>Correct Answer: {{ stage.related_error.correct_answer }}</p>
+        </div>
+        {% endif %}
+
+        <div class="resource-box">
+            {% for resource in stage.resources %}
+                <h3>{{ resource.type }}: {{ resource.title }}</h3>
+                <pre>{{ resource.content }}</pre>
+            {% endfor %}
+        </div>
+
+        <p class="goal"><strong>Goal:</strong> {{ stage.goal }}</p>
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

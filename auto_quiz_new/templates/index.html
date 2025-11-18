@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1st Grade Math Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; }
+        .module-card { border: 2px solid #4CAF50; border-radius: 10px; padding: 20px; margin: 15px; cursor: pointer; background-color: #f9f9f9; }
+        .module-card:hover { background-color: #e8f5e9; }
+        h1 { color: #2E7D32; }
+    </style>
+</head>
+<body>
+    <h1>🎉 Welcome to 1st Grade Math Quiz! 🎉</h1>
+    <p>Choose a module to start practicing:</p>
+
+    {% for module in modules %}
+        <div class="module-card" onclick="window.location.href='/enter-username?module_id={{ module[0] }}'">
+            <h2>{{ module[1] }}</h2>
+            <p>10 fun questions to practice your math skills!</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
